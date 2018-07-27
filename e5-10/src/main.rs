@@ -137,74 +137,188 @@ fn main() {
 	//For example, 3**2 + 4**2 = 9 + 16 = 25 = 5**2.
 	//There exists exactly one Pythagorean triplet for which a + b + c = 1000. Find the product abc.
 
-	fn gen_square_vec() -> Vec<i32> { //generate lookup array of squares
-		let mut a: i32 = 1;
-		let mut vec: Vec<i32> = Vec::new();
-		while a < 1000 {
-			vec.push(a.pow(2));
-			a += 1;
-		}
-		vec
-	}
+	// fn gen_square_vec() -> Vec<i32> { //generate lookup array of squares
+	// 	let mut a: i32 = 1;
+	// 	let mut vec: Vec<i32> = Vec::new();
+	// 	while a < 1000 {
+	// 		vec.push(a.pow(2));
+	// 		a += 1;
+	// 	}
+	// 	vec
+	// }
 	
-	fn iter_check() { //iter a and b in square lookup, print a+b+c=1000 to console
-		let squares_vec: Vec<i32> = gen_square_vec();
-		let num_squares = squares_vec.len() as i32;	
-		let mut a: i32 = 0;
-		let mut b: i32;
-		while a < num_squares { //outer loop a
-			b = a+1;
-			while b < num_squares { //inner loop b
-				if is_square(a,b,&squares_vec) { //lookup is c square 
-					let sum: i32 = sum(a, b, &squares_vec);
-					if sum == 1000 { // return
-						println!("a,b,c -->{}, {}, {}, {}",a+1, b+1, sum - (a+1) - (b+1), sum   );
-						return						
-					} 
-					else if sum > 1000 { //break to iter a
-						break
-					}
-				}
-				b += 1;
-			}
-			a += 1
-		}
-		println!("out of the loop");
-	}
+	// fn iter_check() { //iter a and b in square lookup, print a+b+c=1000 to console
+	// 	let squares_vec: Vec<i32> = gen_square_vec();
+	// 	let num_squares = squares_vec.len() as i32;	
+	// 	let mut a: i32 = 0;
+	// 	let mut b: i32;
+	// 	while a < num_squares { //outer loop a
+	// 		b = a+1;
+	// 		while b < num_squares { //inner loop b
+	// 			if is_square(a,b,&squares_vec) { //lookup is c square 
+	// 				let sum: i32 = sum(a, b, &squares_vec);
+	// 				if sum == 1000 { // return
+	// 					println!("a,b,c -->{}, {}, {}, {}",a+1, b+1, sum - (a+1) - (b+1), sum   );
+	// 					return						
+	// 				} 
+	// 				else if sum > 1000 { //break to iter a
+	// 					break
+	// 				}
+	// 			}
+	// 			b += 1;
+	// 		}
+	// 		a += 1
+	// 	}
+	// 	println!("out of the loop");
+	// }
 
-	fn is_square(a: i32, b:i32, vec:&Vec<i32>) -> bool { //is c square 
-		let aa = a as usize;
-		let bb = b as usize;
-		let ab:i32 = vec[aa] + vec[bb]; 
-		for i in vec.iter() {
-			if ab == *i {
-				return true
-			}
-		} 
-		false
-	}
+	// fn is_square(a: i32, b:i32, vec:&Vec<i32>) -> bool { //is c square 
+	// 	let aa = a as usize;
+	// 	let bb = b as usize;
+	// 	let ab:i32 = vec[aa] + vec[bb]; 
+	// 	for i in vec.iter() {
+	// 		if ab == *i {
+	// 			return true
+	// 		}
+	// 	} 
+	// 	false
+	// }
 
-	fn sum(a: i32, b:i32, vec:&Vec<i32>) -> i32 { // sum of a, b, c
-		let aa = a as usize;
-		let bb = b as usize;
-		let ab:i32 = vec[aa] + vec[bb];
-		let mut c: i32 = 0;
-		for i in vec.iter() {
-			if ab == *i {
-				break
-			}
-			c += 1;
-		}
-		a + b + c + 3 //add 3 because a,b,c are for lookups in zero indexed array
-	}
+	// fn sum(a: i32, b:i32, vec:&Vec<i32>) -> i32 { // sum of a, b, c
+	// 	let aa = a as usize;
+	// 	let bb = b as usize;
+	// 	let ab:i32 = vec[aa] + vec[bb];
+	// 	let mut c: i32 = 0;
+	// 	for i in vec.iter() {
+	// 		if ab == *i {
+	// 			break
+	// 		}
+	// 		c += 1;
+	// 	}
+	// 	a + b + c + 3 //add 3 because a,b,c are for lookups in zero indexed array
+	// }
 
-	iter_check( );
+	// iter_check( );
 
 
 	//e10
 	//The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
 	//Find the sum of all the primes below two million.
 
+	
+
+	fn is_prime(mut x: u64) -> bool {
+		if x > 10 {
+			if x % 2 == 0 {
+				return false
+			} else if x % 3 == 0 {
+				return false
+			}
+		}
+
+		let mut v: Vec<u64> = Vec::new();
+		let mut d = 2;
+		while x > 1 {
+			while x % d == 0 {
+				v.push(d);
+				x /= d
+			}
+			if v.len() > 1 { //break factor function as soon as we know it is not prime
+				return false
+			}
+			d += 1
+		}
+		v.len() == 1
+	}
+
+	//println!("{:?}", is_prime(2)  );
+
+	fn collect_primes(x:u64) -> u64 {
+		//let mut v: Vec<i32> =Vec::new();
+		let mut sum: u64 = 0;
+		for i in 1..x {
+			if i % 50000 == 0 {
+				println!("{:?}", i );
+			}
+
+			
+			if is_prime(i) {
+				//println!("{:?}",i );
+				sum = kid_add(sum, i)
+			}
+		}
+		sum
+	}
+
+	println!("{:?}", collect_primes(2000000) );
+
+	use std::cmp;
+	use std::char;
+
+
+	fn kid_add(x:u64, y:u64) -> u64 {
+		//println!("add {:?} + {:?}", x, y );
+
+		let x_char_vec: Vec<char> = x.to_string().chars().rev().collect();
+		let y_char_vec: Vec<char> = y.to_string().chars().rev().collect();
+		//println!("{:?}, {:?}", x_char_vec, y_char_vec );
+		let ln = cmp::max(   x_char_vec.len(), y_char_vec.len());
+		let mut carry: u32 = 0;
+		let mut result: Vec<char> = Vec::new();
+
+		for ind in 0..ln {
+			
+			//println!("{:?} + {:?} + {:?}", char_to_dig( ind, &x_char_vec ) , char_to_dig( ind, &y_char_vec ) , carry  );
+
+			let raw_digit = char_to_dig( ind, &x_char_vec ) + char_to_dig( ind, &y_char_vec ) + carry;
+			carry = if raw_digit >= 10  { 1 } else {0};
+			let digit = if raw_digit >= 10  { raw_digit - 10 } else { raw_digit};
+			
+			//println!("this is the digit {:?}", digit );
+			//println!("this is the carry {:?}", carry );
+			let c = char::from_digit( digit, 10);
+
+			match c {
+				Some(x) => result.push(x),
+				None => println!("something went wrong 1"),
+			}
+		}
+		if carry > 0 {
+			let c = char::from_digit(carry, 10);
+			//println!("this is the carry {:?}", c );
+			match c {
+				Some(x) => result.push(x),
+				None => println!("something went wrong 2"),
+			}
+		}
+		result.reverse();
+		let result_str: String = result.iter().collect();
+		let result_int: u64 =result_str.parse().unwrap();
+		//println!("{:?}", result_int );
+		result_int
+	}
+
+
+	fn char_to_dig( ind:usize, vec:&Vec<char> ) -> u32 {
+		let dne = vec.get(ind);
+		let x_val: u32 = match dne {
+			Some(x) => {
+				let digit: Option<u32> = x.to_digit(10);
+				match digit {
+					Some(x_dig) => x_dig,
+					None => 0,
+				} 
+			},
+			None => 0,
+		};
+		x_val
+	}
+
+	//println!("{:?}", kid_add(9999999999999999, 9) );
+
+	//println!("{:?}", kid_add(921136, 99991) );
+
+	 //921136 + 99991
 
 
 }
